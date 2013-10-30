@@ -119,23 +119,25 @@
 
 - (void)createPDF
 {
-    NSMutableData *pdfData = [NSMutableData data];
-    
-    CGSize pdfPageSize = ((SGDocument *)_documents[0]).image.size;
-    CGRect pdfPageRect = CGRectMake(0, 0, pdfPageSize.width, pdfPageSize.height);
-    UIGraphicsBeginPDFContextToData(pdfData, pdfPageRect, nil);
-    CGContextRef pdfContext = UIGraphicsGetCurrentContext();
-    
-    for (SGDocument *document in _documents) {
-        UIGraphicsBeginPDFPage();
+    if (_documents.count > 0) {
+        NSMutableData *pdfData = [NSMutableData data];
         
-        UIImageView *documentImageView = [[UIImageView alloc] initWithImage:document.image];
-        [documentImageView.layer renderInContext:pdfContext];
+        CGSize pdfPageSize = ((SGDocument *)_documents[0]).image.size;
+        CGRect pdfPageRect = CGRectMake(0, 0, pdfPageSize.width, pdfPageSize.height);
+        UIGraphicsBeginPDFContextToData(pdfData, pdfPageRect, nil);
+        CGContextRef pdfContext = UIGraphicsGetCurrentContext();
+        
+        for (SGDocument *document in _documents) {
+            UIGraphicsBeginPDFPage();
+            
+            UIImageView *documentImageView = [[UIImageView alloc] initWithImage:document.image];
+            [documentImageView.layer renderInContext:pdfContext];
+        }
+        UIGraphicsEndPDFContext();
+        
+        NSString *pdfPath = [[self savePath] stringByAppendingPathComponent:@"PDF.pdf"];
+        [pdfData writeToFile:pdfPath atomically:YES];
     }
-    UIGraphicsEndPDFContext();
-    
-    NSString *pdfPath = [[self savePath] stringByAppendingPathComponent:@"PDF.pdf"];
-    [pdfData writeToFile:pdfPath atomically:YES];
 }
 
 - (BOOL)hasPDF

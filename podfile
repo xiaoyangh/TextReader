@@ -2,11 +2,13 @@
 
 platform :ios, '5.0'
 
-target :TextReaderUnitTests, :exclusive => true do
+target :OverlayerUnitTests, :exclusive => true do
 	pod 'Kiwi'
+    pod 'GPUImage'
 end
 
-target :TextReader, :exclusive => true do
+target :Overlayer, :exclusive => true do
 	pod 'MBProgressHUD'
     pod 'Underscore.m'
+    pod 'GPUImage'
 end
